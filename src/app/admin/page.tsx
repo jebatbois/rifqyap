@@ -5,8 +5,17 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { 
   Lock, Mail, Key, LogOut, MessageSquare, LayoutDashboard, 
-  Briefcase, Code, Award, Loader2 
+  Briefcase, Code, Award, Loader2, Eye, EyeOff, Trash2, CheckCircle, Circle
 } from "lucide-react";
+
+interface Message {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  is_read: boolean;
+  created_at: string;
+}
 
 export default function AdminPage() {
   // --- Auth States ---
@@ -19,12 +28,19 @@ export default function AdminPage() {
 
   // --- Dashboard States ---
   const [activeTab, setActiveTab] = useState("messages");
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [loadingMessages, setLoadingMessages] = useState(true);
 
   // Cek sesi login saat halaman dimuat
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setLoadingAuth(false);
+      
+      // Jika sudah login, fetch messages
+      if (session) {
+        fetchMessages();
+      }
     });
 
     // Dengarkan perubahan status login (jika login/logout)
@@ -32,10 +48,79 @@ export default function AdminPage() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      
+      // Jika login, fetch messages
+      if (session) {
+        fetchMessages();
+      } else {
+        setMessages([]);
+      }
     });
 
     return () => subscription.unsubscribe();
   }, []);
+
+  // Fetch messages when activeTab changes to 'messages'
+  useEffect(() => {
+    if (activeTab === "messages" && session) {
+      fetchMessages();
+    }
+  }, [activeTab, session]);
+
+  // Function to fetch messages from Supabase
+  const fetchMessages = async () => {
+    try {
+      setLoadingMessages(true);
+      const { data, error } = await supabase
+        .from('messages')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      setMessages(data || []);
+    } catch (error: any) {
+      console.error("Error fetching messages:", error.message);
+    } finally {
+      setLoadingMessages(false);
+    }
+  };
+
+  // Function to mark message as read
+  const markAsRead = async (id: number) => {
+    try {
+      const { error } = await supabase
+        .from('messages')
+        .update({ is_read: true })
+        .eq('id', id);
+
+      if (error) throw error;
+
+      // Update local state
+      setMessages(messages.map(msg => 
+        msg.id === id ? { ...msg, is_read: true } : msg
+      ));
+    } catch (error: any) {
+      console.error("Error marking message as read:", error.message);
+    }
+  };
+
+  // Function to delete message
+  const deleteMessage = async (id: number) => {
+    try {
+      const { error } = await supabase
+        .from('messages')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      // Update local state
+      setMessages(messages.filter(msg => msg.id !== id));
+    } catch (error: any) {
+      console.error("Error deleting message:", error.message);
+    }
+  };
 
   // Fungsi Login
   const handleLogin = async (e: React.FormEvent) => {
@@ -50,6 +135,9 @@ export default function AdminPage() {
 
     if (error) {
       setAuthError(error.message);
+    } else {
+      // After successful login, fetch messages
+      fetchMessages();
     }
     setIsLoggingIn(false);
   };
@@ -191,11 +279,93 @@ export default function AdminPage() {
                 {activeTab} Management
              </h2>
              
-             {/* TEMPAT UNTUK KONTEN TAB NANTINYA */}
-             <div className="p-8 border-2 border-dashed border-slate-700 rounded-xl text-center flex flex-col items-center justify-center text-slate-500">
-                <Loader2 className="w-10 h-10 mb-4 text-slate-600 animate-spin" />
-                <p>Modul <strong className="text-slate-400 capitalize">{activeTab}</strong> sedang disiapkan...</p>
-             </div>
+             {/* Messages Tab Content */}
+             {activeTab === "messages" && (
+               <div className="overflow-x-auto">
+                 {loadingMessages ? (
+                   <div className="flex flex-col items-center justify-center py-12">
+                     <Loader2 className="w-10 h-10 mb-4 text-accent-orange animate-spin" />
+                     <p className="text-slate-400">Loading messages...</p>
+                   </div>
+                 ) : (
+                   <table className="min-w-full divide-y divide-slate-700">
+                     <thead>
+                       <tr>
+                         <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Status</th>
+                         <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Name</th>
+                         <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Email</th>
+                         <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Message</th>
+                         <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Date</th>
+                         <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Actions</th>
+                       </tr>
+                     </thead>
+                     <tbody className="divide-y divide-slate-700">
+                       {messages.length > 0 ? (
+                         messages.map((msg) => (
+                           <tr key={msg.id} className={msg.is_read ? "" : "bg-slate-800/30"}>
+                             <td className="px-4 py-4 whitespace-nowrap">
+                               <div className="flex items-center">
+                                 {!msg.is_read ? (
+                                   <div className="flex items-center">
+                                     <div className="w-3 h-3 bg-accent-orange rounded-full mr-2 animate-pulse"></div>
+                                     <span className="text-accent-orange text-sm font-medium">Unread</span>
+                                   </div>
+                                 ) : (
+                                   <div className="flex items-center">
+                                     <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
+                                     <span className="text-green-500 text-sm font-medium">Read</span>
+                                   </div>
+                                 )}
+                               </div>
+                             </td>
+                             <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-white">{msg.name}</td>
+                             <td className="px-4 py-4 whitespace-nowrap text-sm text-slate-300">{msg.email}</td>
+                             <td className="px-4 py-4 text-sm text-slate-300 max-w-xs truncate">{msg.message}</td>
+                             <td className="px-4 py-4 whitespace-nowrap text-sm text-slate-400">
+                               {new Date(msg.created_at).toLocaleDateString()}
+                             </td>
+                             <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
+                               <div className="flex items-center space-x-2">
+                                 {!msg.is_read && (
+                                   <button
+                                     onClick={() => markAsRead(msg.id)}
+                                     className="text-accent-orange hover:text-accent-hover transition-colors"
+                                     title="Mark as read"
+                                   >
+                                     <Eye className="w-5 h-5" />
+                                   </button>
+                                 )}
+                                 <button
+                                   onClick={() => deleteMessage(msg.id)}
+                                   className="text-red-400 hover:text-red-300 transition-colors"
+                                   title="Delete message"
+                                 >
+                                   <Trash2 className="w-5 h-5" />
+                                 </button>
+                               </div>
+                             </td>
+                           </tr>
+                         ))
+                       ) : (
+                         <tr>
+                           <td colSpan={6} className="px-4 py-8 text-center text-slate-500">
+                             No messages found
+                           </td>
+                         </tr>
+                       )}
+                     </tbody>
+                   </table>
+                 )}
+               </div>
+             )}
+             
+             {/* Placeholder for other tabs */}
+             {activeTab !== "messages" && (
+               <div className="p-8 border-2 border-dashed border-slate-700 rounded-xl text-center flex flex-col items-center justify-center text-slate-500">
+                 <Loader2 className="w-10 h-10 mb-4 text-slate-600 animate-spin" />
+                 <p>Modul <strong className="text-slate-400 capitalize">{activeTab}</strong> sedang disiapkan...</p>
+               </div>
+             )}
            </div>
         </main>
 

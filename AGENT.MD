@@ -1,37 +1,75 @@
-# Agent Identity: Qwen
+# agent.md - rifqy-portfolio Agent Guide
 
-## Identity
-**Name:** Qwen
-**Type:** Large Language Model (LLM)
-**Developer:** Alibaba Cloud
+## Project Overview
+A dynamic personal portfolio website for Rifqy, showcasing technical expertise in fullstack web development and **Machine Learning**. The project aims for a "simple but cool" tech aesthetic, prioritizing responsiveness, clean micro-interactions, and secure data management.
 
-## Mission
-To act as an intelligence-driven, technically sophisticated partner, enabling developers to design, architect, and build advanced, functional, and visually compelling digital experiences.
+## Stack & Environment
+- **Environment:** Ubuntu 24.04, VS Code.
+- **Frontend:** Next.js (App Router), TypeScript.
+- **Backend/Database:** Supabase (BaaS, PostgreSQL, Storage, Edge Functions).
+- **Authentication:** Supabase Auth (for Admin access).
+- **Styling:** Tailwind CSS.
 
-## Core Specializations
-Qwen provides expert guidance and actionable code for modern development stacks, with a focus on clean code, scalability, and robust security. Key areas of expertise include:
+## Design System & Style Guide
+Ensure all generated UI components and modified code adhere strictly to this modern, 'tech-savvy' dark mode aesthetic:
 
-1.  **Advanced Web Development:** Expert in Next.js (App Router), React, TypeScript, and Tailwind CSS. Capable of generating optimized code for interactive, responsive, and performant web applications.
-2.  **Database Design & BaaS Integration:** Deep understanding of PostgreSQL, Supabase (Database, Auth, Storage), and RLS (Row Level Security) policies for secure data management.
-3.  **UI/UX & Sophisticated Interactions:** Skilled in designing and implementing high-end UI elements like infinite icon marquees, sophisticated glow effects, and interactive modal cards using pure CSS or modern libraries, avoiding non-essential, distracting animations.
-4.  **System Architecture & Environment Setup:** Proficient in configuring technical environments (Ubuntu 24.04, VS Code, Next.js setups) and planning comprehensive full-stack and admin CRUD modules.
-5.  **Iterative Project Planning & Bilingual Communication:** Experience managing multi-turn, iterative design and development processes with detailed, structured advice in multiple languages (English/Indonesian).
+- **Palette (Dark Mode Default):**
+  - Primary Navy: ` Slate 900` (`#0F172A`) - Backgrounds.
+  - Secondary Navy: ` Slate 800` (`#1E293B`) - Cards, secondary elements.
+  - Accent Orange: ` Orange 500` (`#F97316`) - CTAs, highlights, glowing effects.
+  - Accent Orange Hover: ` Orange 600` (`#EA580C`).
+  - Text Primary: ` Slate 200` (`#E2E8F0`).
+  - Text Secondary: ` Slate 400` (`#94A3B8`).
 
-## Methodology
-Qwen operates through an iterative, interactive, and code-forward approach:
+- **Key Design Principles:**
+  - **Simple but Cool:** Minimalist typography, default Dark Mode, subtle 'glow' effects, smooth transitions.
+  - **Glow Effects:** Use `shadow-accent-orange/30`, `hover:shadow-accent-orange/50`, and `blur-xl` sparingly for orange glowing borders and light sources.
+  - **Interaction:** Cards must lift on hover (`hover:-translate-y-2`) and show glint layers.
 
-* **Collaborative Design:** Works closely with developers to define unique, professional design languages (e.g., specific Navy-Orange theme) and user flows.
-* **Actionable Code:** Focuses on generating executable, copy-paste-ready code blocks and structured folder layouts for immediate implementation.
-* **Bias for Best Practices:** Emphasizes security, efficiency, and modern standards, prioritizing built-in features (like Supabase Auth and Tailwind CSS utilities) over unnecessary third-party dependencies.
+- **Required Components:**
+  - **Floating Pill Navbar:** Minimalist structure (Home, About, Projects, Contact, Admin), fixed top, glassmorphism blur (`backdrop-blur-md`). Dynamic dot active state.
+  - **Minimalist Typographic Footer:** Signature text "Crafted with O by Rifqy" and minimalist Fa-series social icons.
 
-## Example Success
-Qwen recently architected a high-profile web portfolio for an Indonesian developer, establishing a sophisticated Navy blue and Orange tech aesthetic. Key deliverables included:
+## Project Structure (Next.js App Router)
+Agents must respect this standard structure:
 
-* An efficient Next.js (App Router) and Supabase full-stack architecture.
-* A sophisticated infinite icon marquee with smooth interaction.
-* A unique split-screen Contact page designed for optimal space utilization.
-* A secure Admin dashboard featuring Supabase Auth and pre-configured CRUD modules.
-* Detailed UI descriptions for specialized interactions like glow effects and glints.
+- `src/app/page.tsx` (Home): Hero, Tech Icons Marquee, "Offer" cards.
+- `src/app/about/page.tsx` (About): Dynamic fetching for Skills (categorized), Experience (Timeline Tree), Certificates. Static Education.
+- `src/app/projects/page.tsx` (Projects): Grid layout. Dynamic fetching. **Details open in a Modal Card** (not a new page).
+- `src/app/contact/page.tsx` (Contact): Split-screen layout (Left: Form, Right: Social Cards). Direct Supabase insert to `messages`.
+- `src/app/admin/page.tsx` (Admin): Protected by Supabase Auth (Sign-in form, Dashboard with Message Management priority).
+- `src/components/` (Shared UI: Navbar, Footer).
+- `src/lib/` (Supabase client initialization: `supabase.ts`).
+- `public/` (Visual assets: profile image, Lottie JSON, icons).
 
-## Future Focus
-Qwen is expanding its capabilities in machine learning model development and integration (CV, NLP, Analysis) to provide an even wider range of intelligence-driven solutions.
+## Supabase & Database Integration
+Agents must follow these rules for database interaction:
+
+### SQL Schema Guidelines:
+Refer to the original SQL schema definitions for tables (`skills`, `experiences`, `certificates`, `projects`, `messages`). Use exact data types.
+
+### Row Level Security (RLS) & Authentication:
+- **Public Side (Anon Access):** RLS must restrict public access to `SELECT` (for viewing portfolio content) and `INSERT` (for submitting contact forms to the `messages` table).
+- **Admin Side (Authenticated User):** RLS must require `auth.role() = 'authenticated'` for `INSERT`, `UPDATE`, `DELETE` operations on all tables, and for `SELECT` on the `messages` table.
+- **Admin Authentication:** Implement only via Supabase Auth (Sign-in with email and password). No hardcoded passwords.
+
+## Page-Specific Guidelines
+
+### Home (`/`):
+- **Hero:** Profile image (profile.jpg), Name, English tagline.
+- **Tech Icons Marquee:** Infinite scroll from `react-icons/si`. Pause on hover. Glow effect on tech icons.
+- **"What Can I Offer" Cards:** Lottie animations discarded; use **Mouse-Follow Glow** and **Monospace Tech Keywords** version.
+
+### Contact (`/contact`):
+- Use the 2-column split layout (Left: Form, Right: Connect Cards). Focus on clean micro-interactions and live validation.
+
+### Admin (`/admin`):
+- The dashboard is the primary tool for managing portfolio data.
+- The `messages` table management (Unread/Read status, Delete) is the highest priority feature for the Admin dashboard.
+
+## Agent Constraints & Best Practices
+- **Strict Adherence:** Maintain all existing Tailwind, TypeScript, and Supabase configurations. Do not modify root configs unless explicitly requested.
+- **Language:** All user-facing content (About, taglines, project descriptions) must be in full English.
+- **TypeScript Types:** Always use defined Interfaces for data fetching (e.g., `interface Project`, `interface Skill`).
+- **Secret Protection:** Never commit `.env.local` to version control. Ensure it is in `.gitignore`. Ensure all secrets are accessed via `process.env`.
+- **Bias for Code:** Prioritize editing code and maintaining the existing aesthetic over generating new visual assets unless explicitly instructed.
