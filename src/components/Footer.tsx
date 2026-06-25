@@ -1,8 +1,18 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 // Ubah import dari 'si' menjadi 'fa' (FontAwesome)
 import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
 
 export default function Footer() {
+  const pathname = usePathname();
+  
+  // Hide footer di admin page
+  if (pathname.startsWith("/admin")) {
+    return null;
+  }
+
   const currentYear = new Date().getFullYear();
 
   return (
@@ -11,17 +21,17 @@ export default function Footer() {
         
      {/* Social Media Links */}
         <div className="flex gap-6 mb-8">
-          <Link href="https://github.com/" target="_blank" className="group">
+          <Link href="https://github.com/" target="_blank" className="text-slate-400 hover:text-accent-orange transition-colors duration-300">
             <span className="sr-only">GitHub</span>
-            <FaGithub className="w-6 h-6 text-slate-400 group-hover:text-accent-orange transition-colors duration-300" />
+            <FaGithub className="w-6 h-6" />
           </Link>
-          <Link href="https://linkedin.com/" target="_blank" className="group">
+          <Link href="https://linkedin.com/" target="_blank" className="text-slate-400 hover:text-accent-orange transition-colors duration-300">
             <span className="sr-only">LinkedIn</span>
-            <FaLinkedin className="w-6 h-6 text-slate-400 group-hover:text-accent-orange transition-colors duration-300" />
+            <FaLinkedin className="w-6 h-6" />
           </Link>
-          <Link href="https://instagram.com/" target="_blank" className="group">
+          <Link href="https://instagram.com/" target="_blank" className="text-slate-400 hover:text-accent-orange transition-colors duration-300">
             <span className="sr-only">Instagram</span>
-            <FaInstagram className="w-6 h-6 text-slate-400 group-hover:text-accent-orange transition-colors duration-300" />
+            <FaInstagram className="w-6 h-6" />
           </Link>
         </div>
 

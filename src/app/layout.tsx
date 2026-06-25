@@ -24,7 +24,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${spaceGrotesk.className} bg-primary-blue text-slate-200 antialiased flex flex-col min-h-screen`}>
-        {/* Navbar akan melayang di atas semua konten */}
         <Navbar />
         
         {/* Main content wrapper */}
@@ -32,7 +31,6 @@ export default function RootLayout({
           {children}
         </div>
 
-        {/* Footer akan selalu berada di bawah */}
         <Footer />
       </body>
     </html>

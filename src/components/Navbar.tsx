@@ -5,6 +5,11 @@ import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const pathname = usePathname();
+  
+  // Hide navbar di admin page
+  if (pathname.startsWith("/admin")) {
+    return null;
+  }
 
   const navItems = [
     { name: "Home", path: "/" },
