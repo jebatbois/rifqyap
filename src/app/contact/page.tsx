@@ -138,32 +138,32 @@ export default function Contact() {
             <div className="grid grid-cols-1 gap-4 w-full">
               
               {/* Connect Card: Email */}
-              <Link href="mailto:your_email@example.com" className="group relative overflow-hidden bg-primary-light p-4 rounded-xl border border-slate-700 transition-all hover:border-accent-orange/50 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent-orange/15 flex items-center gap-4">
+              <Link href="mailto:rifqyprayuda204@gmail.com" className="group relative overflow-hidden bg-primary-light p-4 rounded-xl border border-slate-700 transition-all hover:border-accent-orange/50 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent-orange/15 flex items-center gap-4">
                 <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                 <div className="w-10 h-10 bg-accent-orange/10 rounded-lg flex items-center justify-center text-accent-orange flex-shrink-0 transition-transform group-hover:scale-110 relative z-10"><Mail className="w-5 h-5"/></div>
                 <div className="flex-1 relative z-10 min-w-0">
                   <h4 className="text-sm font-semibold text-white group-hover:text-accent-orange transition-colors">Email</h4>
-                  <p className="text-xs text-slate-400 truncate">your_email@example.com</p>
+                  <p className="text-xs text-slate-400 truncate">rifqyprayuda204@gmail.com</p>
                 </div>
               </Link>
 
               {/* Connect Card: LinkedIn */}
-              <Link href="https://linkedin.com/" target="_blank" className="group relative overflow-hidden bg-primary-light p-4 rounded-xl border border-slate-700 transition-all hover:border-accent-orange/50 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent-orange/15 flex items-center gap-4">
+              <Link href="https://linkedin.com/in/rifqy-athaya-prayuda-264212274" target="_blank" className="group relative overflow-hidden bg-primary-light p-4 rounded-xl border border-slate-700 transition-all hover:border-accent-orange/50 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent-orange/15 flex items-center gap-4">
                 <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                 <div className="w-10 h-10 bg-accent-orange/10 rounded-lg flex items-center justify-center text-accent-orange flex-shrink-0 transition-transform group-hover:scale-110 relative z-10"><FaLinkedin className="w-5 h-5"/></div>
                 <div className="flex-1 relative z-10 min-w-0">
                   <h4 className="text-sm font-semibold text-white group-hover:text-accent-orange transition-colors">LinkedIn</h4>
-                  <p className="text-xs text-slate-400 truncate">linkedin.com/in/yourprofile</p>
+                  <p className="text-xs text-slate-400 truncate">linkedin.com/in/rifqy-athaya-prayuda-264212274</p>
                 </div>
               </Link>
 
               {/* Connect Card: Github */}
-              <Link href="https://github.com/" target="_blank" className="group relative overflow-hidden bg-primary-light p-4 rounded-xl border border-slate-700 transition-all hover:border-accent-orange/50 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent-orange/15 flex items-center gap-4">
+              <Link href="https://github.com/jebatbois" target="_blank" className="group relative overflow-hidden bg-primary-light p-4 rounded-xl border border-slate-700 transition-all hover:border-accent-orange/50 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent-orange/15 flex items-center gap-4">
                 <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                 <div className="w-10 h-10 bg-accent-orange/10 rounded-lg flex items-center justify-center text-accent-orange flex-shrink-0 transition-transform group-hover:scale-110 relative z-10"><FaGithub className="w-5 h-5"/></div>
                 <div className="flex-1 relative z-10 min-w-0">
                   <h4 className="text-sm font-semibold text-white group-hover:text-accent-orange transition-colors">GitHub</h4>
-                  <p className="text-xs text-slate-400 truncate">github.com/yourusername</p>
+                  <p className="text-xs text-slate-400 truncate">github.com/jebatbois</p>
                 </div>
               </Link>
 
